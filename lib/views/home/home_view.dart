@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -17,7 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final List<int> testing = [];
   @override
   Widget build(BuildContext context) {
@@ -80,38 +80,47 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 550,
               width: double.infinity,
-              child: testing.isNotEmpty ?
-              ListView.builder(
-                  itemCount: testing.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                        direction: DismissDirection.horizontal,
-                        onDismissed: (_) {},
-                        background: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete_forever_outlined,
-                              color: Colors.grey,
+              child: testing.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: testing.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                            key: Key(index.toString()),
+                            direction: DismissDirection.horizontal,
+                            onDismissed: (_) {},
+                            background: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.delete_forever_outlined,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  MyString.deletedTask,
+                                  style: TextStyle(color: Colors.grey),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              width: 3,
-                            ),
-                            Text(
-                              MyString.deletedTask,
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
+                            child: TaskWidget());
+                      })
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FadeIn(
+                          child: SizedBox(
+                            height: 200.h,
+                            width: 200.w,
+                            child: Lottie.asset(lottieImage,
+                                animate: testing.isNotEmpty ? false : true),
+                          ),
                         ),
-                        key: Key(index.toString()),
-                        child: TaskWidget());
-                  }):
-                  Column(
-                    children: [
-                      Lottie.asset(lottieImage)
-                    ],
-                  ),
+                        FadeInUp(from: 30, child: Text(MyString.doneAllTask)),
+                      ],
+                    ),
             )
           ],
         ),
